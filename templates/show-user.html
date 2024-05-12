@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block titlePage %} Pagina di {{utente}} {% endblock %}
+{% block content %}
+
+    {% if postsFound|length > 0 %}
+
+        {% for post in postsFound %}
+        <div class="media" style="margin-top: 0px !important">
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <div class="media-left">
+                        <img src="{{url_for('download_file', name=foto)}}" class="media-object" style="width:60px; height:60px">
+                    </div>
+                    
+                    <div class="media-body">
+                        <h4 class="media-heading">{{post.date}} - da {{utente}}</h4>
+                        <p>{{post.descr}}</p>
+
+                        {% if "username" in session and session["username"] == utente %}
+                        <a href="{{url_for('del_post', postId=post._id)}}" style="color: red">Elimina post</a>
+                        {% endif %}
+                    </div>
+                </li>
+            </ul>
+        </div>
+        {% endfor %}
+    {% else %}
+        {% if "username" in session and session["username"] == utente %}
+            <h4><b>{{utente}}, non essere timido!</b></h4>
+            <p>Il tuo profilo è vuoto. Riempilo con i tuoi pensieri!</p>
+        {% else %}
+            <h4><b>Sembra che {{utente}} debba ancora sconfiggere la timidezza!</b></h4>
+            <p>Questo utente non ha ancora condiviso nulla. Ripassa più tardi!</p>
+        {% endif %}
+    {% endif %}
+{% endblock %}

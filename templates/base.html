@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="it">
+    <head>
+        <meta charset="utf-8">
+        <title>DummySocial | {% block titlePage %}{% endblock %}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+       
+
+        <style>
+          .jumbotron
+          {
+           background-color: black !important;
+           color: orange;
+           font-weight: bold;
+          }
+
+          .navbar-custom 
+          {
+            color: white;
+            background-color: blueviolet;
+          }
+
+          #myNavbar ul li a 
+          {
+            color: white;
+            font-weight: bold;
+          }
+
+          #myNavbar ul li a:hover
+          {
+            background-color: black;
+          }
+
+          h1
+          {
+            font-weight: 200;
+            margin: 0.4em 0;
+          }
+        
+          h1
+          { 
+            font-size: 3.5em; 
+          }
+
+          .navbar .navbar-header .navbar-toggle .icon-bar 
+          {
+            background-color: white;
+          }
+       
+        </style>
+    </head>
+
+    <body>
+        <nav class="navbar navbar-static-top navbar-custom navabr-fixed-top" style="margin-bottom: 0px;">
+            <div class="container-fluid">
+              <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                </button>
+                <img src="{{url_for('static', filename='icon.png')}}" class="navbar-brand"/>
+              </div>
+              <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-custom navbar-nav">
+                  <li class="navbar-header"><a title="homepage" href="{{url_for('welcome_message')}}">Homepage</a></li>
+                  <li class="navbar-header"><a title="trova utenti" href="{{url_for('find_user')}}">Trova</a></li>
+                  {% if "username" in session %}
+                  <li class="navbar-header"><a title="posta" href="{{url_for('insert_post')}}">Posta</a></li>
+                  {% endif %}
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                  <li>
+                    {% if not "username" in session %}
+                      <a href="{{url_for('go_to_signup')}}"><span class="glyphicon glyphicon-user"></span> Registrati</a>
+                    {% else %}
+                      <a href="{{url_for('user')}}"><span class="glyphicon glyphicon-user"></span>Vedi profilo</a>
+                    {% endif %}
+                  </li>
+                  <li>
+                    {% if not "username" in session %}
+                      <a href="{{url_for('login')}}"><span class="glyphicon glyphicon-log-in"></span> Login</a>
+                    {% else %}
+                      <a href="{{url_for('logout')}}"><span class="glyphicon glyphicon-log-in"></span>Logout</a>
+                    {% endif %}
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+
+          <div class="jumbotron text-center" style="margin-top: 0px">
+            
+            <h1><i>DummySocial!
+              <span
+                 class="txt-rotate"
+                 data-period="2000"
+                 data-rotate='[  "Posta.", "Condividi.", "Esprimiti." ]'></span>
+            </h1></i>
+
+         
+          </div>
+
+        <div class="container">
+            {% block content %}{% endblock %}
+        </div>
+
+      <script>
+        var TxtRotate = function(el, toRotate, period) {
+            this.toRotate = toRotate;
+            this.el = el;
+            this.loopNum = 0;
+            this.period = parseInt(period, 10) || 2000;
+            this.txt = '';
+            this.tick();
+            this.isDeleting = false;
+          };
+  
+          TxtRotate.prototype.tick = function() {
+            var i = this.loopNum % this.toRotate.length;
+            var fullTxt = this.toRotate[i];
+          
+            if (this.isDeleting) {
+              this.txt = fullTxt.substring(0, this.txt.length - 1);
+            } else {
+              this.txt = fullTxt.substring(0, this.txt.length + 1);
+            }
+          
+            this.el.innerHTML = '<span class="wrap">'+this.txt+'</span>';
+          
+            var that = this;
+            var delta = 300 - Math.random() * 100;
+          
+            if (this.isDeleting) { delta /= 2; }
+          
+            if (!this.isDeleting && this.txt === fullTxt) {
+              delta = this.period;
+              this.isDeleting = true;
+            } else if (this.isDeleting && this.txt === '') {
+              this.isDeleting = false;
+              this.loopNum++;
+              delta = 500;
+            }
+          
+            setTimeout(function() {
+              that.tick();
+            }, delta);
+          };
+          
+          window.onload = function() {
+            var elements = document.getElementsByClassName('txt-rotate');
+            for (var i=0; i<elements.length; i++) {
+              var toRotate = elements[i].getAttribute('data-rotate');
+              var period = elements[i].getAttribute('data-period');
+              if (toRotate) {
+                new TxtRotate(elements[i], JSON.parse(toRotate), period);
+              }
+            }
+          }
+      </script>
+    </body>
+</html>

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block titlePage%} {{session["username"]}} {% endblock %}
+{% block content %} 
+    <div class="row">
+        <div class="col-lg-6">
+            <img src="{{url_for('download_file', name=session['propic'])}}" alt="foto profilo" width="256"
+                height="256"/>
+        </div>
+        
+        <div class="col-lg-6">
+            <h1>Informazioni</h1>
+            <p style="font-size: 2em;"><b>Username: </b>{{session["username"]}}</p>
+            <p style="font-size: 2em;"><b>Email: </b>{{session["email"]}}</p>
+            <p><a href="update-user">Aggiorna informazioni</a></p>
+            <p><a href="users/{{session['username']}}">Vai ai miei post</a></p>
+        </div>
+    </div>
+{% endblock %}
